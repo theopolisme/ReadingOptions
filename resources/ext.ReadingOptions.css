@@ -1,0 +1,124 @@
+.reading-options {
+	position: fixed;
+	bottom: 2%;
+	left: 2%;
+	font-size: 1.5em;
+	cursor: pointer;
+	padding: 5px 10px;
+	background-color: black;
+	color: white;
+	opacity: 0.6;
+	font-family: Georgia, serif;
+	width: 25px;
+	white-space: nowrap;
+	z-index: 999;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+.reading-options.revealed {
+	opacity: 0.8;
+}
+
+/* Increase the opacity on hover as well, as a visual cue.
+   This is disabled on mobile to avoid the tap == hover
+   "feature",  which can result in the box being in a state
+   of perpetual hover. */
+@media screen and ( min-width: 800px ) {
+	.reading-options:hover {
+		opacity: 0.8;
+	}
+}
+
+.reading-options div {
+	display: none;
+}
+
+.reading-options.revealed div {
+	display: inline-block;
+}
+
+/* Trigger to open options */
+
+.reading-options div.trigger {
+	display: inline-block;
+}
+
+/* FIXME: Trigger is rather local to Wikimedia. Use "..."
+   or something instead? Customizable? Image? */
+.reading-options div.trigger:before {
+	content: "W";
+}
+
+.reading-options.revealed div.trigger {
+	padding-right: 12px;
+	border-right: 1px solid white;
+}
+
+.reading-options .options {
+	padding-left: 10px;
+}
+
+.reading-options .options > div {
+	position: relative;
+	margin-right: 5px;
+}
+
+/* Popup on hover */
+
+.reading-options .options > div div.popup {
+	display: none;
+	position: absolute;
+	top: -65px;
+	left: -25px;
+	width: 50px;
+	height: 20px;
+	line-height: 20px;
+	padding: 10px;
+	font-size: 40px;
+	text-align: center;
+	color: white;
+	background: rgb(0, 0, 0);
+	border: 4px solid rgb(0, 0, 0);
+	border-radius: 5px;
+	text-shadow: rgba(0, 0, 0, 0.0980392) 1px 1px 1px;
+	box-shadow: rgba(0, 0, 0, 0.0980392) 1px 1px 2px 0px;
+}
+
+.reading-options .options > div div.popup:after {
+	content: "";
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-width: 10px;
+	border-style: solid;
+	border-color: black transparent transparent transparent;
+	top: 44px;
+	left: 25px;
+}
+
+/* Font scale */
+
+.fontscale > span:before {
+	content: "Aa";
+}
+
+/* Invert colors */
+
+.invert-color > span:before {
+	content: "◐";
+}
+
+.inverted-color .invert-color > span:before {
+	content: "◑";
+}
+
+/* Style applied to entire page to invert colors */
+.inverted-color {
+	background-color: black;
+	-webkit-filter: invert(100%);
+	filter: invert(100%);
+}
