@@ -5,9 +5,8 @@
 	font-size: 1.5em;
 	cursor: pointer;
 	padding: 5px 10px;
-	background-color: black;
+	background-color: rgba(0,0,0,0.6);
 	color: white;
-	opacity: 0.6;
 	font-family: Georgia, serif;
 	width: 25px;
 	white-space: nowrap;
@@ -20,7 +19,7 @@
 }
 
 .reading-options.revealed {
-	opacity: 0.8;
+	background-color: rgba(0,0,0,0.8);
 }
 
 /* Increase the opacity on hover as well, as a visual cue.
@@ -29,7 +28,7 @@
    of perpetual hover. */
 @media screen and ( min-width: 800px ) {
 	.reading-options:hover {
-		opacity: 0.8;
+		background-color: rgba(0,0,0,0.8);
 	}
 }
 
