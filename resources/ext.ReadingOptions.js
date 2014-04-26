@@ -6,10 +6,6 @@
 
 		// Strings used internally
 		lsPrefix = 'readingoptions-',
-		userOptionsPrefix = 'userjs-' + lsPrefix,
-
-		// Wrapper for MediaWiki API
-		api = new mw.Api(),
 
 		// Assemble the box
 		$optionsBox = $( '<div class="reading-options">' )
@@ -34,40 +30,12 @@
 		// setTimeout id used to prevent hiding the box; see showBox
 		wTimeout = -1,
 
-		// Object that holds API requests that have been delayed
-		// before they are sent (see setApiUserOption)
-		optionsBeingSet = {},
-
 		// Whether or not the box is open and options are visible
 		boxOpen = false;
-
-	// Sets an option to mw.user.options using the API
-	// FIXME: Is this actually necessary? Or should we just use
-	// localStorage? Might make sense for this to just be on
-	// a device-by-device basis, not user-by-user.
-	function setApiUserOption ( key, value ) {
-		var newTimeout = setTimeout( function () {
-			api.postWithToken( 'options', {
-				action: 'options',
-				optionname: userOptionsPrefix + key,
-				optionvalue: JSON.stringify( value )
-			} );
-		}, 5000 );
-
-		// Kill old request if necessary
-		if ( optionsBeingSet[key] ) {
-			clearTimeout( optionsBeingSet[key] );
-		}
-		
-		optionsBeingSet[key] = newTimeout;		
-	}
 
 	// Sets an option to localStorage and, if the user is
 	// logged in, to mw.user.options as well.
 	function setOption ( key, value ) {
-		if ( !mw.user.isAnon() ) {
-			setApiUserOption( key, value );
-		}
 		if ( window.localStorage ) {
 			window.localStorage[lsPrefix + key] = JSON.stringify( value );
 		}
@@ -76,10 +44,7 @@
 	// Gets an option. Uses localStorage or falls back on
 	// mw.user.options if localStorage is not set.
 	function getOption ( key, fallback ) {
-		var userOption = mw.user.options.get( userOptionsPrefix + key, fallback ),
-			option = JSON.parse( window.localStorage && localStorage[lsPrefix + key] ) || userOption;
-
-		return option;
+		return JSON.parse( window.localStorage && localStorage[lsPrefix + key] ) || fallback;
 	}
 
 	function openBox () {

@@ -25,8 +25,6 @@ $wgResourceModules['ext.ReadingOptions'] = array(
 
 	'messages' => array(),
 
-	'dependencies' => array( 'mediawiki.api' ),
-
 	'localBasePath' => __DIR__,
 	'remoteExtPath' => 'ReadingOptions'
 );
@@ -40,10 +38,7 @@ $wgExtensionMessagesFiles['ReadingOptions'] = __DIR__ . '/ReadingOptions.i18n.ph
 
 $wgAutoloadClasses['ReadingOptionsHooks'] = __DIR__ . '/ReadingOptionsHooks.php';
 
-# Not really hooked up for desktop at the moment. Before setting up, consider
-# removing preference persistence across devices, since it seems like device-by-device
-# config actually makes more sense -- see note in main JavaScript. Also probably
-# will look somewhat different on desktop...
+# Not really hooked up for desktop at the moment.
 #$wgHooks['BeforePageDisplay'][] = 'ReadingOptionsHooks::onBeforePageDisplay';
 
 $wgHooks['EnableMobileModules'][] = 'ReadingOptionsHooks::onEnableMobileModules';
