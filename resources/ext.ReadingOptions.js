@@ -30,7 +30,8 @@
 		// setTimeout id used to prevent hiding the box; see showBox
 		wTimeout = -1,
 
-		// Whether or not the box is open and options are visible
+		// Box state
+		boxShown = false,
 		boxOpen = false;
 
 	// Sets an option to localStorage and, if the user is
@@ -48,8 +49,16 @@
 	}
 
 	function openBox () {
+		// Die if already open
+		if ( boxOpen ) {
+			return;
+		}
+
 		$optionsBox.addClass( 'revealed' );
-		$optionsBox.show().stop().animate( { width: '100px' }, 150, 'swing', function () {
+
+		// Opens the box. `fadeTo( 0, 1 )` ensures the box regains full opacity if,
+		// for example, the user taps it while it is in the process of fading out
+		$optionsBox.stop().fadeTo( 0, 1 ).animate( { width: '100px' }, 150, 'swing', function () {
 			boxOpen = true;
 			// jQuery sets this to hidden for the reveal to work; we need
 			// to show overflow so that popups work correctly
@@ -58,26 +67,56 @@
 	}
 
 	function closeBox () {
+		// Die if already closed
+		if ( !boxOpen ) {
+			return;
+		}
 		$optionsBox.removeClass( 'revealed' );
+
+		// Close popups
+		$optionsBox.find( '.options > div .popup' ).fadeOut();
+
 		$optionsBox.stop().animate( { width: '25px' }, 100, 'swing', function () {
 			boxOpen = false;
-			// Close popups too
-			$optionsBox.find( '.options > div .popup' ).fadeOut();
 		} );
 	}
 
-	function showBox () {
+	function hideBox ( delayed ) {
+		var hide = function () {
+			closeBox();
+			$optionsBox.fadeOut( 400, function () {
+				boxShown = false;
+			} );
+		};
+
+		// Already hidden
+		if ( !boxShown ) {
+			return;
+		}
+
 		// Cancel any previously scheduled fade outs
 		clearTimeout( wTimeout );
 
-		// Fade in to 0.6 opacity
-		$optionsBox.fadeIn();
+		if ( delayed ) {
+			wTimeout = setTimeout( hide, 2000 );
+		} else {
+			hide();
+		}
+	}
 
-		// Set up fade out after 2 seconds
-		wTimeout = setTimeout( function () {
-			closeBox();
-			$optionsBox.fadeOut();
-		}, 2000  );
+	function showBox () {
+		// Box is already shown, do nothing
+		if ( boxShown ) {
+			return;
+		}
+
+		// Fade in
+		$optionsBox.fadeIn();
+		
+		boxShown = true;
+
+		// Set up the delay to auto-hide the box in the future
+		hideBox( /* delayed */ true );
 	}
 
 	function setupBox () {
@@ -94,12 +133,10 @@
 
 		// Set up main trigger to open the box on click
 		$optionsBox.find( '.trigger' ).click( function () {
-			// Ensure it is shown
-			$optionsBox.stop().show();
 			if ( boxOpen ) {
-				// Close box and prepare to hide it by restarting showBox timer
+				// Close box and hide it
 				closeBox();
-				showBox();
+				hideBox( /* delayed */ true );
 			} else {
 				openBox();
 				// Don't hide since the user has opened it
@@ -114,7 +151,11 @@
 				popupRevealed = false;
 
 			$trigger.click( function () {
-				$popup.toggle( !popupRevealed );
+				if ( popupRevealed ) {
+					$popup.fadeOut( 150 );
+				} else {
+					$popup.fadeIn( 150 );
+				}
 				popupRevealed = !popupRevealed;
 			} );
 		} );
