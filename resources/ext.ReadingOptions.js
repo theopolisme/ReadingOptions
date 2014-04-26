@@ -1,7 +1,7 @@
 ( function ( $, mw ) {
 	var DEFAULTS = {
 			'invert-color': false,
-			'font-size': 'inherit'
+			'font-size': false // inherits
 		},
 
 		// Strings used internally
@@ -125,18 +125,16 @@
 			$content = $( '#mw-content-text' ).length ? $( '#mw-content-text' ) : $( '#content' ),
 			$fontBox = $optionsBox.find( '.fontscale' ),
 			$increase = $fontBox.find( '.up' ),
-			$decrease = $fontBox.find( '.down' );
+			$decrease = $fontBox.find( '.down' ),
+			currentSize = getOption( 'font-size', $content.css( 'font-size' ) );
 
 		function setSize ( size ) {
 			$content.css( 'font-size', size + 'px' );
+			currentSize = size;
 		}
 
 		function changeSize ( increase ) {
-			var newSize, currentSize = $content.css( 'font-size' );
-
-			// Remove px at end and convert to float
-			currentSize = parseFloat( currentSize.slice( 0, -2 ) ); 
-				
+			var newSize;
 	
 			if ( increase ) {
 				newSize = currentSize + sizeIncrement;
@@ -158,7 +156,7 @@
 		$decrease.click( function () { changeSize( false ); } );
 
 		// Set size to previous user preference
-		setSize( getOption( 'font-size', DEFAULTS['font-size'] ) );
+		setSize( currentSize );
 	}
 
 	function setupInvertColor () {
