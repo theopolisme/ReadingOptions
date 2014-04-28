@@ -34,18 +34,19 @@
 		boxShown = false,
 		boxOpen = false;
 
-	// Sets an option to localStorage and, if the user is
-	// logged in, to mw.user.options as well.
+	// Sets an option to localStorage.
 	function setOption ( key, value ) {
 		if ( window.localStorage ) {
 			window.localStorage[lsPrefix + key] = JSON.stringify( value );
 		}
 	}
 
-	// Gets an option. Uses localStorage or falls back on
-	// mw.user.options if localStorage is not set.
+	// Gets an option. Uses localStorage or fallback if not set/available.
 	function getOption ( key, fallback ) {
-		return JSON.parse( window.localStorage && localStorage[lsPrefix + key] ) || fallback;
+		if ( window.localStorage && window.localStorage[lsPrefix + key] !== undefined ) {
+			return JSON.parse( window.localStorage[lsPrefix + key] );
+		}
+		return fallback;
 	}
 
 	function openBox () {
@@ -167,7 +168,12 @@
 			$fontBox = $optionsBox.find( '.fontscale' ),
 			$increase = $fontBox.find( '.up' ),
 			$decrease = $fontBox.find( '.down' ),
-			currentSize = getOption( 'font-size', $content.css( 'font-size' ) );
+			currentSize = getOption( 'font-size' );
+
+		// Just use current font size if none set
+		if ( !currentSize ) {
+			currentSize = parseFloat( $content.css( 'font-size' ).slice( 0, -2 ) );
+		}
 
 		function setSize ( size ) {
 			$content.css( 'font-size', size + 'px' );
