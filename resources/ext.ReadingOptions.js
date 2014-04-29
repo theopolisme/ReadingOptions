@@ -1,4 +1,4 @@
-( function ( $, mw ) {
+( function ( $ ) {
 	var DEFAULTS = {
 			'invert-color': false,
 			'font-size': false // inherits
@@ -126,10 +126,10 @@
 		( $( '#mw-mf-page-center' ).length ? $( '#mw-mf-page-center' ) : $( 'body' ) )
 			.prepend( $optionsBox );
 
-		// Show box when the user starts to scroll and 2 seconds after initial load
+		// Show box when the user starts to scroll and 1 second after initial load
 		$( document ).on( 'scroll touchmove', showBox );
 		$( document ).ready( function () {
-			setTimeout( showBox, 2000 );
+			setTimeout( showBox, 1000 );
 		} );
 
 		// Set up main trigger to open the box on click
@@ -227,4 +227,4 @@
 	setupFontScale();
 	setupInvertColor();
 
-}( jQuery, mediaWiki ) );
+}( jQuery ) );
