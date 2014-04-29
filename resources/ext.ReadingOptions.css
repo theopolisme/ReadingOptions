@@ -106,19 +106,21 @@
 	content: "Aa";
 }
 
-/* Invert colors */
+/* Change colors */
 
-.invert-color > span:before {
+.color-mode > span:before {
 	content: "◐";
 }
 
-.inverted-color .invert-color > span:before {
-	content: "◑";
-}
+/* Color schemes applied to entire page */
 
-/* Style applied to entire page to invert colors */
 .inverted-color {
 	background-color: black;
 	-webkit-filter: invert(100%);
 	filter: invert(100%);
+}
+
+.sepia-color {
+	-webkit-filter: sepia(80%);
+	filter: sepia(80%);
 }

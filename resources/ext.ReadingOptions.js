@@ -1,7 +1,7 @@
 ( function ( $ ) {
 	var DEFAULTS = {
-			'invert-color': false,
-			'font-size': false // inherits
+			'color-mode': -1, // no styles applied
+			'font-size': false // uses current size
 		},
 
 		// Strings used internally
@@ -22,7 +22,7 @@
 										$( '<span class="down">' ).text( '-' )
 									)
 							),
-						$( '<div class="invert-color">' )
+						$( '<div class="color-mode">' )
 							.append( $( '<span>' ) )
 					)
 			),
@@ -206,25 +206,49 @@
 		setSize( currentSize );
 	}
 
-	function setupInvertColor () {
-		function changeInvertedState ( invert ) {
-			$( 'body' ).toggleClass( 'inverted-color', invert );
+	function setupColorMode () {
+		var states = [ 'inverted-color', 'sepia-color' ],
+
+			// Cached for when removing classes
+			statesClasses = states.join( ' ' ),
+
+			// Used to iterate through state list
+			maxIndex = states.length - 1,
+
+			// Get previous user setting. If not set, defaults
+			// to -1 (no styles applied).
+			state = getOption( 'color-mode', DEFAULTS['color-mode'] );
+
+		function changeState ( state ) {
+			var $body = $( 'body' );
+
+			// Remove old styles
+			$body.removeClass( statesClasses );
+
+			// If an actual state is specified, apply it
+			if ( state !== -1 ) {
+				$body.addClass( states[state] );
+			}
 		}
 
-		// On click, if body is currently inverted, uninvert and set pref...
-		// otherwise, do the oppose (invert + set pref)
-		$optionsBox.find( '.invert-color span' ).click( function () {
-			var invert = !$( 'body' ).hasClass( 'inverted-color' );
-			changeInvertedState( invert );
-			setOption( 'invert-color', invert );
+		$optionsBox.find( '.color-mode span' ).click( function () {
+			state += 1;
+
+			// Loop back to "no styles applied" state if necessary
+			if ( state > maxIndex ) {
+				state = -1;
+			}
+
+			changeState( state );
+			setOption( 'color-mode', state );
 		} );
 
 		// Set state to previous user preference
-		changeInvertedState( getOption( 'invert-color', DEFAULTS['invert-color'] ) );
+		changeState( state );
 	}
 
 	setupBox();
 	setupFontScale();
-	setupInvertColor();
+	setupColorMode();
 
 }( jQuery ) );
