@@ -25,6 +25,10 @@ $wgResourceModules['ext.ReadingOptions'] = array(
 
 	'messages' => array(),
 
+	'dependencies' => array( 
+		'jquery.json'
+	),
+
 	'localBasePath' => __DIR__,
 	'remoteExtPath' => 'ReadingOptions'
 );

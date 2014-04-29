@@ -37,14 +37,14 @@
 	// Sets an option to localStorage.
 	function setOption ( key, value ) {
 		if ( window.localStorage ) {
-			window.localStorage[lsPrefix + key] = JSON.stringify( value );
+			window.localStorage[lsPrefix + key] = $.toJSON( value );
 		}
 	}
 
 	// Gets an option. Uses localStorage or fallback if not set/available.
 	function getOption ( key, fallback ) {
 		if ( window.localStorage && window.localStorage[lsPrefix + key] !== undefined ) {
-			return JSON.parse( window.localStorage[lsPrefix + key] );
+			return $.evalJSON( window.localStorage[lsPrefix + key] );
 		}
 		return fallback;
 	}
@@ -170,7 +170,7 @@
 			$decrease = $fontBox.find( '.down' ),
 			currentSize = getOption( 'font-size' );
 
-		// Just use current font size if none set
+		// Just use current font size if none set (slice removes 'px')
 		if ( !currentSize ) {
 			currentSize = parseFloat( $content.css( 'font-size' ).slice( 0, -2 ) );
 		}
