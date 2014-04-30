@@ -4,8 +4,12 @@
 			'font-size': false // uses current size
 		},
 
-		// Strings used internally
+		// Prefix for localStorage keys
 		lsPrefix = 'readingoptions-',
+
+		// Main body content area. If on mobile, $main is page-center so
+		// that styles/positions won't mess with the left navigation drawer.
+		$main = $( '#mw-mf-page-center' ).length ? $( '#mw-mf-page-center' ) : $( 'body' ),
 
 		// Assemble the box
 		$optionsBox = $( '<div class="reading-options">' )
@@ -121,10 +125,8 @@
 	}
 
 	function setupBox () {
-		// First, add the box to the page. If on mobile, add it to page-center
-		// so that it won't overlap with the left navigation drawer when opened
-		( $( '#mw-mf-page-center' ).length ? $( '#mw-mf-page-center' ) : $( 'body' ) )
-			.prepend( $optionsBox );
+		// First, add the box to the page
+		$main.prepend( $optionsBox );
 
 		// Show box when the user starts to scroll and 1 second after initial load
 		$( document ).on( 'scroll touchmove', showBox );
@@ -220,14 +222,12 @@
 			state = getOption( 'color-mode', DEFAULTS['color-mode'] );
 
 		function changeState ( state ) {
-			var $body = $( 'body' );
-
 			// Remove old styles
-			$body.removeClass( statesClasses );
+			$main.removeClass( statesClasses );
 
 			// If an actual state is specified, apply it
 			if ( state !== -1 ) {
-				$body.addClass( states[state] );
+				$main.addClass( states[state] );
 			}
 		}
 
